@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import config from "../config/config.json";
 
 function StockList() {
@@ -12,9 +12,10 @@ function StockList() {
     }, []);
 
     const list = products.map((product, index) => (
-        <Text key={index} style={{ color: "#eee" }}>
-            {product.name} - {product.stock}
-        </Text>
+        <View key={index} style={styles.container}>
+            <Text style={styles.textLeft}>{product.name}</Text>
+            <Text style={styles.textRight}>{product.stock}</Text>
+        </View>
     ));
 
     return <View>{list}</View>;
@@ -22,9 +23,34 @@ function StockList() {
 
 export default function Stock() {
     return (
-        <View>
-            <Text style={{ color: "#eee", fontSize: 24 }}>Lagerförteckning</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <Text style={styles.title}>Name</Text>
+                <Text style={styles.title}>Amount</Text>
+            </View>
             <StockList />
-        </View>
+        </ScrollView>
     );
 }
+
+const styles = StyleSheet.create({
+    title: {
+        color: "#fff",
+        fontSize: 24,
+        paddingVertical: 10
+    },
+    container: {
+        justifyContent: "space-between",
+        flexDirection: "row",
+    },
+    textLeft: {
+        color: "#bbb",
+        fontSize: 18,
+        textAlign: "left",
+    },
+    textRight: {
+        color: "#bbb",
+        fontSize: 18,
+        textAlign: "right",
+    },
+});

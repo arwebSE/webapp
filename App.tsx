@@ -9,8 +9,8 @@ export default function App() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.base}>
-                <Text style={{ color: "#fff", fontSize: 42 }}>Lager-Appen</Text>
-                <Image source={warehouse} style={{ width: 320, height: 240 }} />
+                <Text style={styles.title}>LagerAppen</Text>
+                <Image source={warehouse} style={styles.logo} />
                 <Stock />
                 <StatusBar style="light" />
             </View>
@@ -27,5 +27,17 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingLeft: 12,
         paddingRight: 12,
+    },
+    title: {
+        color: "#fff",
+        fontSize: 42,
+        padding: 20,
+        textAlign: "center",
+    },
+    logo: {
+        width: 320 / 2,
+        height: 240 / 2,
+        alignSelf: "center",
+        margin: 10,
     },
 });
