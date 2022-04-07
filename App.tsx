@@ -1,9 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import warehouse from "./assets/warehouse.jpg";
+import { SafeAreaView, StyleSheet, Text, View, Image } from "react-native";
 
-import Stock from './components/Stock';
+import Stock from "./components/Stock";
+
+const warehouse = require("./assets/warehouse.jpg");
 
 export default function App() {
     return (
