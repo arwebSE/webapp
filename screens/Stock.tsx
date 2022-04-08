@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     title: {
         color: "#fff",
         fontSize: 24,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     container: {
         justifyContent: "space-between",
