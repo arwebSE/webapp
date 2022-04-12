@@ -2,6 +2,8 @@ export const header1 = {
     color: "white",
     fontSize: 42,
     marginBottom: 28,
+    padding: 20,
+    textAlign: "center",
 };
 
 export const header2 = {
@@ -19,5 +21,9 @@ export const header3 = {
 export const normal = {
     color: "white",
     fontSize: 20,
-    marginBottom: 28,
+};
+
+export const bold = {
+    ...normal,
+    fontWeight: "bold",
 };

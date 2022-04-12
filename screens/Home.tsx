@@ -5,12 +5,12 @@ import Stock from "./Stock";
 
 const warehouse = require("../assets/warehouse.jpg");
 
-export default function Home() {
+export default function Home({products, setProducts}) {
     return (
         <View style={styles.base}>
             <Text style={styles.title}>LagerAppen</Text>
             <Image source={warehouse} style={styles.logo} />
-            <Stock />
+            <Stock products={products} setProducts={setProducts} />
         </View>
     );
 }

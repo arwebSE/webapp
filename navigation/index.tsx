@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -36,6 +36,7 @@ const routeIcons = {
 };
 const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
+    const [products, setProducts] = useState([]);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -46,7 +47,7 @@ function BottomTabNavigator() {
                 },
             })}
         >
-            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Home">{() => <Home products={products} setProducts={setProducts} />}</Tab.Screen>
             <Tab.Screen name="Orders" component={OrderList} options={{ title: "Order List", tabBarLabel: "Orders" }} />
         </Tab.Navigator>
     );

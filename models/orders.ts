@@ -13,6 +13,16 @@ const orders = {
         // orderrader som finns i ordern
         // TODO: Ändra status för ordern till packad
     },
+    updateOrder: async function updateOrder(order) {
+        order.api_key = config.apiKey;
+        const response = await fetch(`${config.baseUrl}/orders`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order),
+        });
+        if (response.status === 204) return true;
+        else return false;
+    },
 };
 
 export default orders;

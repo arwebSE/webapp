@@ -1,13 +1,16 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView, StyleSheet } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 import Navigation from "./navigation";
 
 export default function App() {
     return (
         <SafeAreaView style={styles.container}>
-            <Navigation />
+            <RootSiblingParent>
+                <Navigation />
+            </RootSiblingParent>
             <StatusBar style="light" />
         </SafeAreaView>
     );

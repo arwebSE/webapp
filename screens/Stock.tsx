@@ -1,35 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
-import config from "../config/config.json";
+import { Text, View, StyleSheet, FlatList, RefreshControl } from "react-native";
 
-function StockList() {
-    const [products, setProducts] = useState([]);
+import productModel from "../models/products";
+
+function StockList({products, setProducts}) {
+    const [loading, setLoading] = useState<boolean>(false);
+
+    async function fetchProducts() {
+        setLoading(true);
+        setProducts(await productModel.getProducts());
+        setLoading(false)
+    }
 
     useEffect(() => {
-        fetch(`${config.baseUrl}/products?api_key=${config.apiKey}`)
-            .then((response) => response.json())
-            .then((result) => setProducts(result.data));
+        fetchProducts();
     }, []);
 
-    const list = products.map((product, index) => (
-        <View key={index} style={styles.container}>
-            <Text style={styles.textLeft}>{product.name}</Text>
-            <Text style={styles.textRight}>{product.stock}</Text>
-        </View>
-    ));
-
-    return <View>{list}</View>;
+    return (
+        <FlatList
+            data={products}
+            renderItem={({ item, index }) => (
+                <View key={index} style={styles.container}>
+                    <Text style={styles.textLeft}>{item.name}</Text>
+                    <Text style={styles.textRight}>{item.stock}</Text>
+                </View>
+            )}
+            refreshControl={
+                <RefreshControl
+                    refreshing={loading}
+                    onRefresh={fetchProducts}
+                    colors={["black", "gray"]} // Android
+                    tintColor={"white"} // iOS
+                    title={"Reloading..."} // iOS
+                    titleColor={"white"} // iOS
+                />
+            }
+        />
+    );
 }
 
-export default function Stock() {
+export default function Stock({products, setProducts}) {
     return (
-        <ScrollView>
+        <>
             <View style={styles.container}>
                 <Text style={styles.title}>Name</Text>
                 <Text style={styles.title}>Amount</Text>
             </View>
-            <StockList />
-        </ScrollView>
+            <StockList products={products} setProducts={setProducts}/>
+        </>
     );
 }
 
