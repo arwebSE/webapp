@@ -48,14 +48,14 @@ function BottomTabNavigator() {
             <Tab.Screen name="Home">{() => <Home products={products} setProducts={setProducts} />}</Tab.Screen>
             <Tab.Screen
                 name="Orders"
-                component={Orders}
-                options={({ navigation }) => ({
+                options={({ route, navigation }) => ({
                     headerShown: false,
                     title: "Order List",
                     tabBarLabel: "Orders",
-                    setProducts: { setProducts },
                 })}
-            />
+            >
+                {() => <Orders setProducts={setProducts} />}
+            </Tab.Screen>
         </Tab.Navigator>
     );
 }

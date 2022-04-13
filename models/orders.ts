@@ -1,4 +1,5 @@
 import config from "../config/config.json";
+import products from "./products";
 
 const orders = {
     getOrders: async function getOrders() {
@@ -7,13 +8,29 @@ const orders = {
         return result.data;
     },
     pickOrder: async function pickOrder(order: Partial<Order>) {
-        console.log("request to pick order:", order.order_items);
-
-        // TODO: Minska lagersaldo för de
-        // orderrader som finns i ordern
-        // TODO: Ändra status för ordern till packad
+        // if too few of any item
+        for (let item of order.order_items) {
+            if (item.amount > item.stock) {
+                console.log(`Error: Too few ${item.name} in stock!`);
+                return false;
+            }
+        }
+        //updating stock
+        for (let item of order.order_items) {
+            const product = {
+                ...item,
+                id: item.product_id,
+                stock: item.stock - item.amount,
+            };
+            delete product.product_id;
+            delete product.amount;
+            if (!(await products.updateProduct(product))) return false;
+        }
+        order.status_id = 200;
+        if (await orders.updateOrder(order)) return true;
+        else return false;
     },
-    updateOrder: async function updateOrder(order) {
+    updateOrder: async function updateOrder(order: Partial<Order>) {
         order.api_key = config.apiKey;
         const response = await fetch(`${config.baseUrl}/orders`, {
             method: "PUT",
@@ -21,7 +38,10 @@ const orders = {
             body: JSON.stringify(order),
         });
         if (response.status === 204) return true;
-        else return false;
+        else {
+            console.log(`Error: Failed to update order ${order.name}`);
+            return false;
+        }
     },
 };
 

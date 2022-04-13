@@ -1,9 +1,14 @@
 interface OrderItem {
-    id: number;
+    api_key: string;
+    order_id: number;
+    product_id: number;
+    amount: any;
+    stock: number;
     name: string;
 }
 
 interface Order {
+    api_key: string;
     id: number;
     name: string;
     address: string;
@@ -13,4 +18,15 @@ interface Order {
     status: string;
     status_id: number;
     order_items: Array<OrderItem>;
+}
+interface Product {
+    api_key: string;
+    id: number;
+    article_number: string;
+    name: string;
+    description: string;
+    specifiers: string;
+    stock: number;
+    location: string;
+    price: number;
 }

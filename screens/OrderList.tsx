@@ -5,7 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 import orderModel from "../models/orders";
 import { Typography } from "../styles";
 
-export default function OrderList({ navigation, products, setProducts }) {
+export default function OrderList({ navigation }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [allOrders, setAllOrders] = useState([]);
     const [showAll, setShowAll] = useState<boolean>(false);

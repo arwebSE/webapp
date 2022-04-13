@@ -9,8 +9,8 @@ import { toast } from "../utils/misc";
 
 export default function OrderDetails({ route, navigation, setProducts }) {
     const { order } = route.params;
-    const [productsList, setProductsList] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [productsList, setProductsList] = useState([]);
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -23,12 +23,15 @@ export default function OrderDetails({ route, navigation, setProducts }) {
     }, []);
 
     const pick = async () => {
-        await orderModel.pickOrder(order);
-        setProducts(productsList);
+        const results = await orderModel.pickOrder(order);
+        if (!results) console.log("error picking!");
+        else toast("Order picked successfully!");
+        
+        setProducts(await productModel.getProducts());
         navigation.dispatch(StackActions.popToTop());
     };
 
-    async function setOrderAsNew(order) {
+    const setOrderAsNew = async (order) => {
         console.log(`setting order ${order.id} as new`);
         setLoading(true);
         order.status_id = 100;
@@ -36,7 +39,7 @@ export default function OrderDetails({ route, navigation, setProducts }) {
         if (result) toast("Updated successfully!");
         else toast("Update Error!");
         setLoading(false);
-    }
+    };
 
     const itemsList = order.order_items.map((item, index) => {
         return (
