@@ -26,7 +26,7 @@ export default function OrderDetails({ route, navigation, setProducts }) {
         const results = await orderModel.pickOrder(order);
         if (!results) console.log("error picking!");
         else toast("Order picked successfully!");
-        
+
         setProducts(await productModel.getProducts());
         navigation.dispatch(StackActions.popToTop());
     };
@@ -72,42 +72,21 @@ export default function OrderDetails({ route, navigation, setProducts }) {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: "center" }}>
-                    <View style={styles.row}>
+                    {order.status === "Ny" ? (
                         <Button title="Pick Order" onPress={pick} />
+                    ) : (
                         <Button
-                            title="Set as New"
+                            title="Set as New (reset)"
                             onPress={() => {
                                 setOrderAsNew(order);
                                 navigation.dispatch(StackActions.popToTop());
                             }}
                         />
-                    </View>
+                    )}
                 </View>
             </ScrollView>
         </View>
     );
-}
-
-{
-    /* <FlatList
-                data={productsList}
-                renderItem={({ item, index }) => (
-                        <Text style={styles.text} key={index}>
-                            {item.name} - {item.amount} - {item.location}
-                        </Text>
-                )}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={loading}
-                        onRefresh={fetchProducts}
-                        colors={["black", "gray"]} // Android
-                        tintColor={"white"} // iOS
-                        title={"Reloading..."} // iOS
-                        titleColor={"white"} // iOS
-                    />
-                }
-            />
- */
 }
 
 const styles = StyleSheet.create({
