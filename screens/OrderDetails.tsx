@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button, FlatList, RefreshControl, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Button, FlatList, RefreshControl, ScrollView, ActivityIndicator } from "react-native";
+import { StackActions } from "@react-navigation/native";
 
 import orderModel from "../models/orders";
 import productModel from "../models/products";
 import { Typography } from "../styles";
+import { toast } from "../utils/misc";
 
-export default function PickList({ route, navigation, setProducts }) {
+export default function OrderDetails({ route, navigation, setProducts }) {
     const { order } = route.params;
     const [productsList, setProductsList] = useState([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -20,10 +22,20 @@ export default function PickList({ route, navigation, setProducts }) {
         fetchProducts();
     }, []);
 
-    async function pick() {
+    const pick = async () => {
         await orderModel.pickOrder(order);
-        setProducts(await productModel.getProducts());
-        navigation.navigate("Orders", { reload: true });
+        setProducts(productsList);
+        navigation.dispatch(StackActions.popToTop());
+    };
+
+    async function setOrderAsNew(order) {
+        console.log(`setting order ${order.id} as new`);
+        setLoading(true);
+        order.status_id = 100;
+        const result = await orderModel.updateOrder(order);
+        if (result) toast("Updated successfully!");
+        else toast("Update Error!");
+        setLoading(false);
     }
 
     const itemsList = order.order_items.map((item, index) => {
@@ -35,6 +47,8 @@ export default function PickList({ route, navigation, setProducts }) {
             </View>
         );
     });
+
+    if (loading) return <ActivityIndicator />;
 
     return (
         <View style={styles.root}>
@@ -55,7 +69,16 @@ export default function PickList({ route, navigation, setProducts }) {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: "center" }}>
-                    <Button title="Plocka order" onPress={pick} />
+                    <View style={styles.row}>
+                        <Button title="Pick Order" onPress={pick} />
+                        <Button
+                            title="Set as New"
+                            onPress={() => {
+                                setOrderAsNew(order);
+                                navigation.dispatch(StackActions.popToTop());
+                            }}
+                        />
+                    </View>
                 </View>
             </ScrollView>
         </View>

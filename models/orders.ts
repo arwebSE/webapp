@@ -7,7 +7,7 @@ const orders = {
         return result.data;
     },
     pickOrder: async function pickOrder(order: Partial<Order>) {
-        console.log("request to pick order:", order);
+        console.log("request to pick order:", order.order_items);
 
         // TODO: Minska lagersaldo för de
         // orderrader som finns i ordern

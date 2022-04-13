@@ -8,8 +8,7 @@ import Colors from "../constants/Colors";
 
 import NotFoundScreen from "../screens/NotFoundScreen";
 import Home from "../screens/Home";
-import OrderList from "../screens/OrderList";
-import OrderDetails from "./../screens/OrderDetails";
+import Orders from "../screens/Orders";
 
 export default function Navigation() {
     return (
@@ -25,7 +24,6 @@ function RootNavigator() {
         <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
-            <Stack.Screen name="Details" component={OrderDetails} options={{ title: "Details" }} />
         </Stack.Navigator>
     );
 }
@@ -48,7 +46,16 @@ function BottomTabNavigator() {
             })}
         >
             <Tab.Screen name="Home">{() => <Home products={products} setProducts={setProducts} />}</Tab.Screen>
-            <Tab.Screen name="Orders" component={OrderList} options={{ title: "Order List", tabBarLabel: "Orders" }} />
+            <Tab.Screen
+                name="Orders"
+                component={Orders}
+                options={({ navigation }) => ({
+                    headerShown: false,
+                    title: "Order List",
+                    tabBarLabel: "Orders",
+                    setProducts: { setProducts },
+                })}
+            />
         </Tab.Navigator>
     );
 }

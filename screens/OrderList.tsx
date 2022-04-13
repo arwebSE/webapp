@@ -1,121 +1,70 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet, RefreshControl, FlatList } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import orderModel from "../models/orders";
 import { Typography } from "../styles";
-import { toast } from "../utils/misc";
 
-export default function OrderList({ route, navigation }) {
-    const { reload } = route.params || false;
+export default function OrderList({ navigation, products, setProducts }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [allOrders, setAllOrders] = useState([]);
     const [showAll, setShowAll] = useState<boolean>(false);
 
-    if (reload) fetchOrders();
     async function fetchOrders() {
         setLoading(true);
         setAllOrders(await orderModel.getOrders());
         setLoading(false);
     }
 
+    const isFocused = useIsFocused();
     useEffect(() => {
-        fetchOrders();
-    }, []);
-
-    async function setOrderAsNew(order) {
-        console.log(`setting order ${order.id} as new`);
-        setLoading(true);
-        order.status_id = 100;
-        const result = await orderModel.updateOrder(order);
-        if (result) toast("Updated successfully!");
-        else toast("Update Error!");
-        setLoading(false);
-    }
+        isFocused && fetchOrders();
+    }, [isFocused]);
 
     return (
         <View style={styles.root}>
-            <Text style={styles.title}>Ordrar redo att plockas</Text>
+            {showAll ? (
+                <Text style={styles.title}>Alla ordrar</Text>
+            ) : (
+                <Text style={styles.title}>Ordrar redo att plockas</Text>
+            )}
             <View style={styles.row}>
                 <Text style={Typography.bold}>Name</Text>
                 <Text style={Typography.bold}>Status</Text>
             </View>
-            {showAll ? (
-                <>
-                    <FlatList
-                        data={allOrders}
-                        renderItem={({ item, index }) => (
-                            <View style={styles.row}>
-                                <Button
-                                    title={item.name}
-                                    key={index + "b1"}
-                                    onPress={() => {
-                                        navigation.navigate("Details", {
-                                            order: item,
-                                        });
-                                    }}
-                                />
-                                {item.status !== "Ny" ? (
-                                    <Text>New</Text>
-                                ) : (
-                                    <Button
-                                        title={"set as new"}
-                                        key={index + "b2"}
-                                        onPress={() => {
-                                            setOrderAsNew(item);
-                                        }}
-                                    />
-                                )}
-                            </View>
-                        )}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={loading}
-                                onRefresh={fetchOrders}
-                                colors={["black", "gray"]} // Android
-                                tintColor={"white"} // iOS
-                                title={"Reloading..."} // iOS
-                                titleColor={"white"} // iOS
-                            />
-                        }
-                    />
-                    <View style={{ marginBottom: 50 }}>
-                        <Button title="Show completed orders" onPress={() => setShowAll(true)} />
+
+            <FlatList
+                data={showAll ? allOrders : allOrders.filter((order) => order.status === "Ny")}
+                renderItem={({ item, index }) => (
+                    <View style={styles.row}>
+                        <Button
+                            title={item.name}
+                            key={index + "b1"}
+                            onPress={() => {
+                                navigation.navigate("OrderDetails", {
+                                    order: item,
+                                });
+                            }}
+                        />
+                        <Text style={Typography.normal}>{item.status}</Text>
                     </View>
-                </>
-            ) : (
-                <>
-                    <FlatList
-                        data={allOrders.filter((order) => order.status === "Ny")}
-                        renderItem={({ item, index }) => (
-                            <View style={styles.row}>
-                                <Button
-                                    title={item.name}
-                                    key={index + "b1"}
-                                    onPress={() => {
-                                        navigation.navigate("Details", {
-                                            order: item,
-                                        });
-                                    }}
-                                />
-                                <Text>New</Text>
-                            </View>
-                        )}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={loading}
-                                onRefresh={fetchOrders}
-                                colors={["black", "gray"]} // Android
-                                tintColor={"white"} // iOS
-                                title={"Reloading..."} // iOS
-                                titleColor={"white"} // iOS
-                            />
-                        }
+                )}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={loading}
+                        onRefresh={fetchOrders}
+                        colors={["black", "gray"]} // Android
+                        tintColor={"white"} // iOS
+                        titleColor={"white"} // iOS
                     />
-                    <View style={{ marginBottom: 50 }}>
-                        <Button title="Hide completed orders" onPress={() => setShowAll(false)} />
-                    </View>
-                </>
-            )}
+                }
+            />
+            <View style={{ marginBottom: 50 }}>
+                <Button
+                    title={showAll ? "Hide completed orders" : "Show completed orders"}
+                    onPress={() => setShowAll(!showAll)}
+                />
+            </View>
         </View>
     );
 }
