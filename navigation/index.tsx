@@ -9,6 +9,8 @@ import Colors from "../constants/Colors";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import Home from "../screens/Home";
 import Orders from "../screens/Orders";
+import SettingsModal from "../screens/SettingsModal";
+import { Pressable } from "react-native";
 
 export default function Navigation() {
     return (
@@ -22,8 +24,17 @@ const Stack = createStackNavigator();
 function RootNavigator() {
     return (
         <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-            <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
+            <Stack.Group>
+                <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+                <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
+            </Stack.Group>
+            <Stack.Group screenOptions={{ presentation: "modal" }}>
+                <Stack.Screen
+                    name="SettingsModal"
+                    component={SettingsModal}
+                    options={{ title: "Settings", headerLeft: null }}
+                />
+            </Stack.Group>
         </Stack.Navigator>
     );
 }
@@ -45,7 +56,21 @@ function BottomTabNavigator() {
                 },
             })}
         >
-            <Tab.Screen name="Home">{() => <Home products={products} setProducts={setProducts} />}</Tab.Screen>
+            <Tab.Screen
+                name="Home"
+                options={({ navigation }) => ({
+                    headerRight: () => (
+                        <Pressable
+                            onPress={() => navigation.navigate("SettingsModal")}
+                            style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}
+                        >
+                            <Ionicons name="cog" size={32} color={"white"} style={{ padding: 5 }} />
+                        </Pressable>
+                    ),
+                })}
+            >
+                {() => <Home products={products} setProducts={setProducts} />}
+            </Tab.Screen>
             <Tab.Screen
                 name="Orders"
                 options={({ route, navigation }) => ({

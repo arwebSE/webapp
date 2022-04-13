@@ -8,7 +8,7 @@ const products = {
     },
     updateProduct: async function updateProduct(product: Partial<Product>) {
         product.api_key = config.apiKey;
-        console.log("attempting to update", product);
+        console.log("Attempting to update product", product.name);
 
         const response = await fetch(`${config.baseUrl}/products`, {
             method: "PUT",
