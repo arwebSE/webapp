@@ -30,3 +30,13 @@ interface Product {
     location: string;
     price: number;
 }
+
+interface Delivery {
+    api_key: string;
+    id: number;
+    product_id: number;
+    product_name: string;
+    amount: number;
+    delivery_date: string;
+    comment: string;
+}

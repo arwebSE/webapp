@@ -18,6 +18,12 @@ export const header3 = {
     marginBottom: 28,
 };
 
+export const header4 = {
+    color: "white",
+    fontSize: 24,
+    marginBottom: 10,
+};
+
 export const normal = {
     color: "white",
     fontSize: 20,

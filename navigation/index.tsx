@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { DarkTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -6,11 +7,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import Colors from "../constants/Colors";
 
+import SettingsModal from "../screens/SettingsModal";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import Home from "../screens/Home";
 import Orders from "../screens/Orders";
-import SettingsModal from "../screens/SettingsModal";
-import { Pressable } from "react-native";
+import Deliveries from "../screens/Deliveries";
 
 export default function Navigation() {
     return (
@@ -41,7 +42,8 @@ function RootNavigator() {
 
 const routeIcons = {
     Home: "home",
-    Orders: "file-tray-stacked",
+    Orders: "clipboard",
+    Deliveries: "enter",
 };
 const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
@@ -81,6 +83,14 @@ function BottomTabNavigator() {
             >
                 {() => <Orders setProducts={setProducts} />}
             </Tab.Screen>
+            <Tab.Screen
+                name="Deliveries"
+                component={Deliveries}
+                options={({ route, navigation }) => ({
+                    headerShown: false,
+                    tabBarLabel: "Orders",
+                })}
+            />
         </Tab.Navigator>
     );
 }
