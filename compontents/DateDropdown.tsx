@@ -28,6 +28,7 @@ export default function DateDropdown(props) {
                         setShow(false);
                     }}
                     value={dropdownDate}
+                    themeVariant='dark'
                 />
             )}
         </View>

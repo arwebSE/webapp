@@ -6,6 +6,23 @@ const deliveries = {
         const result = await response.json();
         return result.data;
     },
+    addDelivery: async function addDelivery(delivery: Partial<Delivery>) {
+        delivery.api_key = config.apiKey;
+        console.log("Attempting to add delivery", delivery);
+
+        const response = await fetch(`${config.baseUrl}/deliveries`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(delivery),
+        });
+        const result = await response.json();
+        console.log("res", result);
+        if (!result.errors) return true;
+        else {
+            console.log(`Error: Failed to add delivery, err: ${result.errors.title} ${result.errors.status}`);
+            return false;
+        }
+    },
 };
 
 export default deliveries;

@@ -32,4 +32,5 @@ export const normal = {
 export const bold = {
     ...normal,
     fontWeight: "bold",
+    marginBottom: 8
 };

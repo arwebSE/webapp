@@ -1,23 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button, ScrollView, TextInput } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { StyleSheet, View, Text, Button, TextInput } from "react-native";
 import { StackActions } from "@react-navigation/native";
+import DateDropdown from "../compontents/DateDropdown";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { Typography } from "../styles";
-import { toast } from "../utils/misc";
 import ProductDropDown from "../compontents/ProductDropdown";
-import DateDropdown from "../compontents/DateDropdown";
+import deliveryModel from "../models/deliveries";
+import productModel from "../models/products";
+import { toast } from "../utils/misc";
 
-export default function NewDelivery() {
+export default function NewDelivery({ navigation }) {
     const [delivery, setDelivery] = useState<Partial<Delivery>>({});
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
+    const commentEl = useRef(null);
 
-    const addDelivery = () => {
-        console.log("add del!");
+    const addDelivery = async () => {
+        console.log("call: product=", currentProduct, "delivery=", delivery);
+        
+        const deliveryResult = await deliveryModel.addDelivery(delivery);
+        if (deliveryResult) {
+            const updatedProduct = {
+                ...currentProduct,
+                stock: (currentProduct.stock || 0) + (delivery.amount || 0),
+            };
+            const productResult = await productModel.updateProduct(updatedProduct);
+            if (productResult) {
+                toast("Delivery successfully added!");
+                navigation.dispatch(StackActions.popToTop());
+            }
+        }
     };
 
     return (
-        <ScrollView style={styles.root}>
-            <Text style={{ ...Typography.header2 }}>Ny inleverans</Text>
+        <KeyboardAwareScrollView style={styles.root} extraHeight={150}>
+            <Text style={{ ...Typography.header1 }}>Ny inleverans</Text>
 
             <Text style={{ ...Typography.bold }}>Produkt</Text>
             <ProductDropDown delivery={delivery} setDelivery={setDelivery} setCurrentProduct={setCurrentProduct} />
@@ -33,6 +50,11 @@ export default function NewDelivery() {
                 }}
                 value={delivery?.amount?.toString()}
                 keyboardType="numeric"
+                keyboardAppearance="dark"
+                placeholder="Antal produkter..."
+                placeholderTextColor={"#bbb"}
+                onSubmitEditing={() => commentEl.current.focus()}
+                returnKeyType="done"
             />
 
             <Text style={{ ...Typography.bold }}>Kommentar</Text>
@@ -42,10 +64,18 @@ export default function NewDelivery() {
                     setDelivery({ ...delivery, comment: content });
                 }}
                 value={delivery?.comment}
+                keyboardAppearance="dark"
+                placeholder="Skriv en kommentar..."
+                placeholderTextColor={"#bbb"}
+                ref={commentEl}
+                onSubmitEditing={() => addDelivery()}
+                returnKeyType="done"
             />
 
-            <Button title="Gör inleverans" onPress={() => addDelivery()} />
-        </ScrollView>
+            <View style={styles.button}>
+                <Button title="Skapa inleverans" onPress={() => addDelivery()} />
+            </View>
+        </KeyboardAwareScrollView>
     );
 }
 
@@ -75,5 +105,14 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: "#ccc",
         borderRadius: 10,
+        color: "white",
+    },
+    button: {
+        marginVertical: 10,
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: "#333",
+        backgroundColor: "#111",
     },
 });
