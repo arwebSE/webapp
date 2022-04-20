@@ -15,9 +15,17 @@ export default function NewDelivery({ navigation }) {
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
     const commentEl = useRef(null);
 
+    useEffect(() => {
+        console.log("Delivery updated:", delivery);
+    }, [delivery]);
+
+    useEffect(() => {
+        console.log("currentProduct updated:", currentProduct);
+    }, [currentProduct]);
+
     const addDelivery = async () => {
         console.log("call: product=", currentProduct, "delivery=", delivery);
-        
+
         const deliveryResult = await deliveryModel.addDelivery(delivery);
         if (deliveryResult) {
             const updatedProduct = {

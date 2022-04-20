@@ -12,7 +12,9 @@ export default function ProductDropDown(props) {
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            setProducts(await productModel.getProducts());
+            const products = await productModel.getProducts();
+            setProducts(products);
+            props.setCurrentProduct(products[0]);
             setLoading(false);
         };
         fetchProducts();

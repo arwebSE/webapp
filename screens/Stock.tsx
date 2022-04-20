@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { Text, View, StyleSheet, FlatList, RefreshControl } from "react-native";
 
 import productModel from "../models/products";
 
-function StockList({products, setProducts}) {
+function StockList({ products, setProducts }) {
     const [loading, setLoading] = useState<boolean>(false);
 
     async function fetchProducts() {
         setLoading(true);
         setProducts(await productModel.getProducts());
-        setLoading(false)
+        setLoading(false);
     }
 
     useEffect(() => {
         fetchProducts();
     }, []);
+
+    const isFocused = useIsFocused();
+    useEffect(() => {
+        isFocused && fetchProducts();
+    }, [isFocused]);
 
     return (
         <FlatList
@@ -31,22 +37,21 @@ function StockList({products, setProducts}) {
                     onRefresh={fetchProducts}
                     colors={["black", "gray"]} // Android
                     tintColor={"white"} // iOS
-                    title={"Reloading..."} // iOS
-                    titleColor={"white"} // iOS
                 />
             }
+            showsVerticalScrollIndicator={false}
         />
     );
 }
 
-export default function Stock({products, setProducts}) {
+export default function Stock({ products, setProducts }) {
     return (
         <>
             <View style={styles.container}>
                 <Text style={styles.title}>Name</Text>
                 <Text style={styles.title}>Amount</Text>
             </View>
-            <StockList products={products} setProducts={setProducts}/>
+            <StockList products={products} setProducts={setProducts} />
         </>
     );
 }

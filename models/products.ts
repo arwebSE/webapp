@@ -15,8 +15,10 @@ const products = {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(product),
         });
-        if (response.status === 204) return true;
-        else {
+        if (response.status === 204) {
+            console.log("Product update success!");
+            return true;
+        } else {
             console.log(`Error: Failed to update product ${product.name}`);
             return false;
         }
