@@ -1,21 +1,25 @@
-import { Text, View, StyleSheet, Pressable, SafeAreaView } from "react-native";
 import React from "react";
+import { Text, View, StyleSheet, Pressable, SafeAreaView } from "react-native";
+import { StackActions } from "@react-navigation/native";
 
 import config from "../config/config.json";
 import { toast } from "../utils/misc";
 
-const reset = async () => {
-    const response = await fetch(`${config.baseUrl}/copier/reset?api_key=${config.apiKey}`, {
-        method: "POST",
-    });
-    if (response.status === 201) {
-        toast("Reset successfully!");
-        return true;
-    } else console.log("Failed to reset");
-    return;
-};
+export default function SettingsModal({ navigation }) {
+    const reset = async () => {
+        const response = await fetch(`${config.baseUrl}/copier/reset`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ api_key: `${config.apiKey}` }),
+        });
+        if (response.status === 201) {
+            toast("Reset successfully!");
+            navigation.dispatch(StackActions.popToTop());
+            return true;
+        } else console.log("Failed to reset");
+        return;
+    };
 
-export default function SettingsModal() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.user}>

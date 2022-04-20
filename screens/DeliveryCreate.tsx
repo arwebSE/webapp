@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Text, Button, TextInput } from "react-native";
+import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import DateDropdown from "../compontents/DateDropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -24,7 +24,11 @@ export default function NewDelivery({ navigation }) {
     }, [currentProduct]);
 
     const addDelivery = async () => {
-        console.log("call: product=", currentProduct, "delivery=", delivery);
+        if (!delivery.amount) {
+            console.log("Failed to input delivery amount!");
+            Alert.alert("Please input product AMOUNT!")
+            return;
+        }
 
         const deliveryResult = await deliveryModel.addDelivery(delivery);
         if (deliveryResult) {
@@ -76,7 +80,6 @@ export default function NewDelivery({ navigation }) {
                 placeholder="Skriv en kommentar..."
                 placeholderTextColor={"#bbb"}
                 ref={commentEl}
-                onSubmitEditing={() => addDelivery()}
                 returnKeyType="done"
             />
 
