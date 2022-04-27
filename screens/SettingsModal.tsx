@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Pressable, SafeAreaView } from "react-native";
 import { StackActions } from "@react-navigation/native";
 
 import config from "../config/config.json";
 import { toast } from "../utils/misc";
+import authModel from "../models/auth";
+import Colors from "../constants/Colors";
 
 export default function SettingsModal({ navigation }) {
+    const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
+
+    useEffect(() => {
+        const setLoggedIn = async () => {
+            setIsLoggedIn(await authModel.loggedIn());
+        };
+        setLoggedIn();
+    }, []);
+
     const reset = async () => {
         const response = await fetch(`${config.baseUrl}/copier/reset`, {
             method: "POST",
@@ -20,17 +31,31 @@ export default function SettingsModal({ navigation }) {
         return;
     };
 
+    const logout = async () => {
+        await authModel.logout();
+        toast("Logged out!");
+        navigation.dispatch(StackActions.popToTop());
+    };
+
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.user}>
-                <Text style={styles.title}>Reset DB below</Text>
-            </View>
+            {isLoggedIn ? (
+                <>
+                    <View style={styles.logout}>
+                        <Pressable onPress={() => logout()} style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+                            <Text style={styles.header}>Logout</Text>
+                        </Pressable>
+                    </View>
 
-            <View style={styles.reset}>
-                <Pressable onPress={() => reset()} style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
-                    <Text style={styles.header}>Reset</Text>
-                </Pressable>
-            </View>
+                    <View style={styles.reset}>
+                        <Pressable onPress={() => reset()} style={({ pressed }) => ({ opacity: pressed ? 0.5 : 1 })}>
+                            <Text style={styles.header}>Reset DB</Text>
+                        </Pressable>
+                    </View>
+                </>
+            ) : (
+                <Text>Login to access settings</Text>
+            )}
         </SafeAreaView>
     );
 }
@@ -58,6 +83,13 @@ const styles = StyleSheet.create({
     },
     reset: {
         backgroundColor: "red",
+        borderRadius: 10,
+        padding: 15,
+        textAlign: "center",
+        marginTop: 20,
+    },
+    logout: {
+        backgroundColor: Colors.tint,
         borderRadius: 10,
         padding: 15,
         textAlign: "center",

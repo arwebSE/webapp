@@ -40,3 +40,18 @@ interface Delivery {
     delivery_date: string;
     comment: string;
 }
+
+interface Auth {
+    api_key: string;
+    email: string;
+    password: string;
+}
+
+interface Invoice {
+    api_key: string;
+    id: number;
+    order_id: number;
+    total_price: string;
+    creation_date: string;
+    due_date: string;
+}

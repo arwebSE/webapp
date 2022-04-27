@@ -5,9 +5,11 @@ const auth = {
     loggedIn: async function loggedIn() {
         const token = await storage.readToken();
         const twentyFourHours = 1000 * 60 * 60 * 24;
-        const notExpired = new Date().getTime() - token.date < twentyFourHours;
-
-        return token && notExpired;
+        if (token) {
+            const notExpired = new Date().getTime() - token.date < twentyFourHours;
+            return token && notExpired;
+        }
+        return;
     },
     login: async function login(email: string, password: string) {
         const data = {

@@ -1,11 +1,11 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from "@react-navigation/stack";
 
 import Login from '../screens/Login';
 import Register from '../screens/Register';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
-export default function Deliveries(props) {
+export default function Auth(props) {
     return (
         <Stack.Navigator initialRouteName="Login">
             <Stack.Screen name="Login">

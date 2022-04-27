@@ -12,10 +12,21 @@ export default function DateDropdown(props) {
 
     useEffect(() => {
         const date = new Date();
-        props.setDelivery({
-            ...props.delivery,
-            delivery_date: date.toLocaleDateString("se-SV"),
-        });
+        const dueDate = new Date(date.setMonth(date.getMonth() + 1));
+        if (props.delivery) {
+            console.log("detected as DELIVERY date picker");
+            props.setDelivery({
+                ...props.delivery,
+                delivery_date: date.toLocaleDateString("se-SV"),
+            });
+        } else if (props.invoice) {
+            console.log("detected as ORDER date picker");
+            props.setInvoice({
+                ...props.invoice,
+                creation_date: date.toLocaleDateString("se-SV"),
+                due_date: dueDate.toLocaleDateString("se-SV"),
+            });
+        }
     }, []);
 
     return (
@@ -25,10 +36,19 @@ export default function DateDropdown(props) {
                 <DateTimePicker
                     onChange={(event, date) => {
                         setDropdownDate(date);
-                        props.setDelivery({
-                            ...props.delivery,
-                            delivery_date: date.toLocaleDateString("se-SV"),
-                        });
+                        if (props.delivery) {
+                            props.setDelivery({
+                                ...props.delivery,
+                                delivery_date: date.toLocaleDateString("se-SV"),
+                            });
+                        } else if (props.invoice) {
+                            const dueDate = new Date(date.setMonth(date.getMonth() + 1));
+                            props.setInvoice({
+                                ...props.invoice,
+                                creation_date: date.toLocaleDateString("se-SV"),
+                                due_date: dueDate.toLocaleDateString("se-SV"),
+                            });
+                        }
                         setShow(false);
                     }}
                     value={dropdownDate}

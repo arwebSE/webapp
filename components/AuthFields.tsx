@@ -1,42 +1,53 @@
+import { StackActions } from "@react-navigation/native";
 import { View, Text, TextInput, Button } from "react-native";
-import { Typography, Forms, Base } from '../styles';
+import { Typography, Forms, Base } from "../styles";
 
-export default function AuthFields({ auth, setAuth, title, submit, navigation}) {
+export default function AuthFields({ auth, setAuth, title, submit, navigation }) {
     return (
         <View style={Base.base}>
-            <Text style={Typography.header2}>{title}</Text>
-            <Text style={Typography.label}>E-post</Text>
+            <Text style={Typography.header1}>{title}</Text>
+            <Text style={Typography.label}>Email</Text>
             <TextInput
                 style={Forms.input}
                 onChangeText={(content: string) => {
-                    setAuth({ ...auth, email: content })
+                    setAuth({ ...auth, email: content });
                 }}
                 value={auth?.email}
                 keyboardType="email-address"
             />
-            <Text style={Typography.label}>Lösenord</Text>
+            <Text style={Typography.label}>Password</Text>
             <TextInput
                 style={Forms.input}
                 onChangeText={(content: string) => {
-                    setAuth({ ...auth, password: content })
+                    setAuth({ ...auth, password: content });
                 }}
                 value={auth?.password}
                 secureTextEntry={true}
             />
-            <Button
-                title={title}
-                onPress={() => {
-                    submit();
-                }}
-            />
-            {title === "Logga in" &&
+            <View style={Forms.button}>
                 <Button
-                    title="Registrera istället"
+                    title={title}
+                    onPress={() => {
+                        submit();
+                    }}
+                />
+            </View>
+            {title === "Login" && (
+                <Button
+                    title="Register New Account"
                     onPress={() => {
                         navigation.navigate("Register");
                     }}
                 />
-            }
+            )}
+            {title === "Register" && (
+                <Button
+                    title="Back to Login"
+                    onPress={() => {
+                        navigation.dispatch(StackActions.popToTop());
+                    }}
+                />
+            )}
         </View>
     );
-};
+}

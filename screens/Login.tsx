@@ -18,7 +18,7 @@ export default function Login({navigation, setIsLoggedIn}) {
             auth={auth}
             setAuth={setAuth}
             submit={doLogin}
-            title="Logga in"
+            title="Login"
             navigation={navigation}
         />
     );

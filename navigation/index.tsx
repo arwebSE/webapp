@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { DarkTheme, NavigationContainer } from "@react-navigation/native";
+import { DarkTheme, NavigationContainer, useIsFocused } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import Colors from "../constants/Colors";
+import authModel from "../models/auth";
 
+import Auth from "../components/Auth";
 import SettingsModal from "../screens/SettingsModal";
 import NotFoundScreen from "../screens/NotFoundScreen";
 import Home from "../screens/Home";
 import Orders from "../screens/Orders";
 import Deliveries from "../screens/Deliveries";
+import Invoices from "../screens/Invoices";
 
 export default function Navigation() {
     return (
@@ -43,11 +46,28 @@ function RootNavigator() {
 const routeIcons = {
     Home: "home",
     Orders: "clipboard",
-    Deliveries: "enter",
+    Deliveries: "file-tray-stacked",
+    Auth: "enter",
+    Invoices: "cash",
 };
 const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
     const [products, setProducts] = useState([]);
+    const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
+
+    const setLoggedIn = async () => {
+        setIsLoggedIn(await authModel.loggedIn());
+    };
+
+    useEffect(() => {
+        setLoggedIn();
+    }, []);
+
+    const isFocused = useIsFocused();
+    useEffect(() => {
+        isFocused && setLoggedIn();
+    }, [isFocused]);
+
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -88,9 +108,28 @@ function BottomTabNavigator() {
                 component={Deliveries}
                 options={({ route, navigation }) => ({
                     headerShown: false,
-                    tabBarLabel: "Orders",
+                    tabBarLabel: "Deliveries",
                 })}
             />
+            {isLoggedIn ? (
+                <Tab.Screen
+                    name="Invoices"
+                    component={Invoices}
+                    options={({ route, navigation }) => ({
+                        headerShown: false,
+                    })}
+                />
+            ) : (
+                <Tab.Screen
+                    name="Auth"
+                    options={({ route, navigation }) => ({
+                        headerShown: false,
+                        title: "Login",
+                    })}
+                >
+                    {() => <Auth setIsLoggedIn={setIsLoggedIn} />}
+                </Tab.Screen>
+            )}
         </Tab.Navigator>
     );
 }
