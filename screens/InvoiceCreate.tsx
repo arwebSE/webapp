@@ -23,6 +23,8 @@ export default function InvoiceCreate({ navigation }) {
     }, [currentOrder]);
 
     const addInvoice = async () => {
+        invoice.order_id = currentOrder.id;
+        console.log("adding invoice:", invoice);
         const invoiceResult = await invoiceModel.addInvoice(invoice);
         if (invoiceResult) {
             const updatedOrder = {

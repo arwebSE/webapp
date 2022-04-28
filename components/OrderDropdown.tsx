@@ -14,6 +14,8 @@ export default function OrderDropdown(props) {
         setLoading(true);
         const fetchedOrders = await orderModel.getOrders();
         const packagedOrders = fetchedOrders.filter((order) => order.status_id > 100 && order.status_id < 600);
+        console.log("order items:", packagedOrders[0].order_items);
+        console.log("order items sum", packagedOrders[0].order_items.reduce((n, {price, amount}) => n + price, 0))
         setOrders(packagedOrders);
         props.setCurrentOrder(packagedOrders[0]);
         setLoading(false);
@@ -21,7 +23,6 @@ export default function OrderDropdown(props) {
 
     useEffect(() => {
         fetchOrders();
-        
     }, []);
 
     const isFocused = useIsFocused();
