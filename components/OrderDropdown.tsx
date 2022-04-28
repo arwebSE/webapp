@@ -21,6 +21,7 @@ export default function OrderDropdown(props) {
 
     useEffect(() => {
         fetchOrders();
+        
     }, []);
 
     const isFocused = useIsFocused();

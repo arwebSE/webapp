@@ -19,7 +19,7 @@ export default function InvoiceCreate({ navigation }) {
     }, [invoice]);
 
     useEffect(() => {
-        console.log("currentOrder updated:", currentOrder);
+        console.log("currentOrder updated", currentOrder.id);
     }, [currentOrder]);
 
     const addInvoice = async () => {
@@ -39,16 +39,18 @@ export default function InvoiceCreate({ navigation }) {
 
     return (
         <View style={styles.root}>
-            <Text style={{ ...Typography.header1 }}>New Invoice</Text>
+            <View>
+                <Text style={{ ...Typography.header1 }}>New Invoice</Text>
 
-            <Text style={{ ...Typography.bold }}>Order</Text>
-            <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} />
+                <Text style={{ ...Typography.bold }}>Order</Text>
+                <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} />
 
-            <Text style={{ ...Typography.bold }}>Date</Text>
-            <DateDropdown invoice={invoice} setInvoice={setInvoice} />
+                <Text style={{ ...Typography.bold }}>Date</Text>
+                <DateDropdown invoice={invoice} setInvoice={setInvoice} />
+            </View>
 
             <View style={styles.button}>
-                <Button title="Skapa faktura" onPress={() => addInvoice()} />
+                <Button title="Save" onPress={() => addInvoice()} />
             </View>
         </View>
     );
@@ -58,6 +60,7 @@ const styles = StyleSheet.create({
     root: {
         flex: 1,
         paddingHorizontal: 10,
+        justifyContent: "space-between",
     },
     text: {
         color: "white",

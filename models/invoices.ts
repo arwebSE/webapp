@@ -38,7 +38,7 @@ const invoices = {
     },
     deleteInvoice: async function deleteInvoice(invoice: Partial<Invoice>) {
         invoice.api_key = config.apiKey;
-        console.log("Attempting to DELETE invoice:", invoice);
+        console.log("Attempting to DELETE invoice...");
         const token = await storage.readToken();
         if (token) {
             const response = await fetch(`${config.baseUrl}/invoices`, {
