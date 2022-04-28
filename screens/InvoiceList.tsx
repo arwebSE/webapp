@@ -36,14 +36,12 @@ export default function Invoices({ navigation }) {
 
     if (loading && invoices) return <ActivityIndicator />;
     else {
-        console.log("invoices", JSON.stringify(invoices));
-
         const table = invoices.map((invoice, index) => {
             return (
                 <DataTable.Row key={index}>
                     <DataTable.Cell>{invoice.name}</DataTable.Cell>
-                    <DataTable.Cell>{invoice.color}</DataTable.Cell>
-                    <DataTable.Cell numeric>{invoice.legs}</DataTable.Cell>
+                    <DataTable.Cell>{invoice.due_date}</DataTable.Cell>
+                    <DataTable.Cell numeric>{invoice.total_price}</DataTable.Cell>
                 </DataTable.Row>
             );
         });
@@ -54,9 +52,9 @@ export default function Invoices({ navigation }) {
                     <PaperProvider theme={theme}>
                         <DataTable>
                             <DataTable.Header>
-                                <DataTable.Title>Animal</DataTable.Title>
-                                <DataTable.Title>Color</DataTable.Title>
-                                <DataTable.Title numeric># of legs</DataTable.Title>
+                                <DataTable.Title>Name</DataTable.Title>
+                                <DataTable.Title>Due Date</DataTable.Title>
+                                <DataTable.Title numeric>Cost</DataTable.Title>
                             </DataTable.Header>
                             {table}
                         </DataTable>

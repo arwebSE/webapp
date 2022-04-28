@@ -39,7 +39,7 @@ const orders = {
         });
         if (response.status === 204) return true;
         else {
-            console.log(`Error: Failed to update order ${order.name}`);
+            console.log(`Error: Failed to update order: ${order.name}`);
             return false;
         }
     },

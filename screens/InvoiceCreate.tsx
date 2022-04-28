@@ -7,6 +7,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Typography } from "../styles";
 import OrderDropdown from "./../components/OrderDropdown";
 import invoiceModel from "../models/invoices";
+import orderModel from "../models/orders";
 import { toast } from "../utils/misc";
 
 export default function InvoiceCreate({ navigation }) {
@@ -24,25 +25,32 @@ export default function InvoiceCreate({ navigation }) {
     const addInvoice = async () => {
         const invoiceResult = await invoiceModel.addInvoice(invoice);
         if (invoiceResult) {
-            toast("Invoice successfully added!");
-            navigation.dispatch(StackActions.popToTop());
+            const updatedOrder = {
+                ...currentOrder,
+                status_id: 600,
+            };
+            const orderResult = await orderModel.updateOrder(updatedOrder);
+            if (orderResult) {
+                toast("Invoice successfully added!");
+                navigation.dispatch(StackActions.popToTop());
+            }
         }
     };
 
     return (
-        <KeyboardAwareScrollView style={styles.root} extraHeight={150}>
-            <Text style={{ ...Typography.header1 }}>Ny inleverans</Text>
+        <View style={styles.root}>
+            <Text style={{ ...Typography.header1 }}>New Invoice</Text>
 
             <Text style={{ ...Typography.bold }}>Order</Text>
             <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} />
 
-            <Text style={{ ...Typography.bold }}>Datum</Text>
+            <Text style={{ ...Typography.bold }}>Date</Text>
             <DateDropdown invoice={invoice} setInvoice={setInvoice} />
 
             <View style={styles.button}>
                 <Button title="Skapa faktura" onPress={() => addInvoice()} />
             </View>
-        </KeyboardAwareScrollView>
+        </View>
     );
 }
 

@@ -6,7 +6,6 @@ interface OrderItem {
     stock: number;
     name: string;
 }
-
 interface Order {
     api_key: string;
     id: number;

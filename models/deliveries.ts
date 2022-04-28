@@ -9,7 +9,6 @@ const deliveries = {
     addDelivery: async function addDelivery(delivery: Partial<Delivery>) {
         delivery.api_key = config.apiKey;
         console.log("Attempting to add delivery:", delivery);
-
         const response = await fetch(`${config.baseUrl}/deliveries`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -18,7 +17,7 @@ const deliveries = {
         const result = await response.json();
         if (!result.errors) return true;
         else {
-            console.log(`Error: Failed to add delivery, err: ${result.errors.title} ${result.errors.status}`);
+            console.log("Error: Failed to add delivery", result.errors);
             return false;
         }
     },

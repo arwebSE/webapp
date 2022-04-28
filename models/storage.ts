@@ -8,10 +8,9 @@ const storage = {
                 date: new Date().getTime(),
             };
             const jsonValue = JSON.stringify(tokenAndDate);
-
             await AsyncStorage.setItem('@token', jsonValue);
         } catch (e) {
-            // saving error
+            console.log("Token save error:", e);
         }
     },
     readToken: async function readToken(): Promise<any> {
@@ -19,7 +18,7 @@ const storage = {
             const jsonValue = await AsyncStorage.getItem('@token');
             return jsonValue != null ? JSON.parse(jsonValue) : null;
         } catch (e) {
-            // error reading value
+            console.log("Token read error:", e);
         }
     },
     deleteToken: async function deleteToken() {
