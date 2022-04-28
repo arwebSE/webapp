@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Button, View } from "react-native";
+import { ActivityIndicator, Button, View, ScrollView } from "react-native";
 import { DefaultTheme, DataTable, Provider as PaperProvider } from "react-native-paper";
 
 import Colors from "../constants/Colors";
@@ -17,14 +17,10 @@ export default function Invoices({ navigation }) {
         setLoading(false);
     }
 
-    useEffect(() => {
-        fetchInvoices();
-    }, []);
-
-    /* const isFocused = useIsFocused();
+    const isFocused = useIsFocused();
     useEffect(() => {
         isFocused && fetchInvoices();
-    }, [isFocused]); */
+    }, [isFocused]);
 
     const theme = {
         ...DefaultTheme,
@@ -54,16 +50,18 @@ export default function Invoices({ navigation }) {
 
         return (
             <>
-                <PaperProvider theme={theme}>
-                    <DataTable>
-                        <DataTable.Header>
-                            <DataTable.Title>Animal</DataTable.Title>
-                            <DataTable.Title>Color</DataTable.Title>
-                            <DataTable.Title numeric># of legs</DataTable.Title>
-                        </DataTable.Header>
-                        {table}
-                    </DataTable>
-                </PaperProvider>
+                <ScrollView>
+                    <PaperProvider theme={theme}>
+                        <DataTable>
+                            <DataTable.Header>
+                                <DataTable.Title>Animal</DataTable.Title>
+                                <DataTable.Title>Color</DataTable.Title>
+                                <DataTable.Title numeric># of legs</DataTable.Title>
+                            </DataTable.Header>
+                            {table}
+                        </DataTable>
+                    </PaperProvider>
+                </ScrollView>
                 <View style={Forms.button}>
                     <Button title="Skapa Faktura" onPress={() => navigation.navigate("InvoiceCreate")} />
                 </View>

@@ -12,7 +12,8 @@ export default function DateDropdown(props) {
 
     useEffect(() => {
         const date = new Date();
-        const dueDate = new Date(date.setMonth(date.getMonth() + 1));
+        const newDate = new Date();
+        const dueDate = new Date(newDate.setMonth(newDate.getMonth() + 1));
         if (props.delivery) {
             console.log("detected as DELIVERY date picker");
             props.setDelivery({
@@ -42,7 +43,8 @@ export default function DateDropdown(props) {
                                 delivery_date: date.toLocaleDateString("se-SV"),
                             });
                         } else if (props.invoice) {
-                            const dueDate = new Date(date.setMonth(date.getMonth() + 1));
+                            const newDate = new Date(date);
+                            const dueDate = new Date(newDate.setMonth(newDate.getMonth() + 1));
                             props.setInvoice({
                                 ...props.invoice,
                                 creation_date: date.toLocaleDateString("se-SV"),
