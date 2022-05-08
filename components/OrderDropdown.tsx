@@ -16,8 +16,8 @@ export default function OrderDropdown(props) {
         const packagedOrders = fetchedOrders.filter((order) => order.status_id > 100 && order.status_id < 600);
         setOrders(packagedOrders);
         props.setCurrentOrder(packagedOrders[0]); // select first order at load
-        console.log("set default! =)");
-        
+        const orderSum = packagedOrders[0].order_items.reduce((n, { price, amount }) => n + price * amount, 0)
+        props.setInvoice({ ...props.invoice, order_id: packagedOrders[0].id, total_price: orderSum });
         setLoading(false);
     };
 
