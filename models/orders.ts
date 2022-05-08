@@ -1,4 +1,5 @@
 import config from "../config/config.json";
+import { toast } from "../utils/misc";
 import products from "./products";
 
 const orders = {
@@ -12,6 +13,7 @@ const orders = {
         for (let item of order.order_items) {
             if (item.amount > item.stock) {
                 console.log(`Error: Too few ${item.name} in stock!`);
+                toast(`Too few "${item.name}" in stock!`)
                 return false;
             }
         }

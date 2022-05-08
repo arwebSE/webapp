@@ -14,10 +14,10 @@ export default function OrderDropdown(props) {
         setLoading(true);
         const fetchedOrders = await orderModel.getOrders();
         const packagedOrders = fetchedOrders.filter((order) => order.status_id > 100 && order.status_id < 600);
-        console.log("order items:", packagedOrders[0].order_items);
-        console.log("order items sum", packagedOrders[0].order_items.reduce((n, {price, amount}) => n + price, 0))
         setOrders(packagedOrders);
-        props.setCurrentOrder(packagedOrders[0]);
+        props.setCurrentOrder(packagedOrders[0]); // select first order at load
+        console.log("set default! =)");
+        
         setLoading(false);
     };
 
@@ -40,7 +40,9 @@ export default function OrderDropdown(props) {
         <Picker
             selectedValue={props.invoice?.order_id}
             onValueChange={(itemValue) => {
-                props.setInvoice({ ...props.invoice, order_id: itemValue, total_price: 33 /* CHANGE THIS */ });
+                //console.log("order items:", ordersHash[itemValue].order_items);
+                const orderSum = ordersHash[itemValue].order_items.reduce((n, { price, amount }) => n + price * amount, 0)
+                props.setInvoice({ ...props.invoice, order_id: itemValue, total_price: orderSum });
                 props.setCurrentOrder(ordersHash[itemValue]);
             }}
             itemStyle={{ color: "white" }}
