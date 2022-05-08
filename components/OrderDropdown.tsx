@@ -4,6 +4,7 @@ import { ActivityIndicator } from "react-native";
 
 import orderModel from "../models/orders";
 import { useIsFocused } from "@react-navigation/native";
+import { toast } from "../utils/misc";
 
 export default function OrderDropdown(props) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -15,10 +16,15 @@ export default function OrderDropdown(props) {
         const fetchedOrders = await orderModel.getOrders();
         const packagedOrders = fetchedOrders.filter((order) => order.status_id > 100 && order.status_id < 600);
         setOrders(packagedOrders);
-        props.setCurrentOrder(packagedOrders[0]); // select first order at load
-        const orderSum = packagedOrders[0].order_items.reduce((n, { price, amount }) => n + price * amount, 0);
-        const newInvoice = { ...props.invoice, order_id: packagedOrders[0].id, total_price: orderSum };
-        props.setInvoice(newInvoice);
+        if (packagedOrders.length > 0) {
+            props.setCurrentOrder(packagedOrders[0]); // select first order at load
+            const orderSum = packagedOrders[0].order_items.reduce((n, { price, amount }) => n + price * amount, 0);
+            const newInvoice = { ...props.invoice, order_id: packagedOrders[0].id, total_price: orderSum };
+            props.setInvoice(newInvoice);
+        } else {
+            toast("Warning! No orders marked as 'packed'!");
+            props.setDisabled(true);
+        }
         setLoading(false);
     };
 
@@ -27,22 +33,25 @@ export default function OrderDropdown(props) {
             console.log("waiting...");
         } else if (!props.wait) {
             console.log("props.wait is false!");
-            checkEmptyObj();
+            objNotEmpty(props.invoice) && fetchOrders();
         }
     }, [props.wait]);
 
-    const checkEmptyObj = async () => {
-        if (Object.keys(props.invoice).length === 0) {
-            console.log("checkEmptyObj: invoice obj length is 0! waiting.");
+    const objNotEmpty = async (obj) => {
+        if (Object.keys(obj).length === 0) {
+            console.log("objNotEmpty: obj length is 0. =(");
+            return false;
         } else {
-            console.log("checkEmptyObj: invoice obj not 0! fetching...");
-            fetchOrders();
+            console.log("objNotEmpty: obj not empty!");
+            return true;
         }
     };
 
     const isFocused = useIsFocused();
     useEffect(() => {
-        isFocused && checkEmptyObj();
+        if (isFocused) {
+            objNotEmpty(props.invoice) && fetchOrders();
+        }
     }, [isFocused]);
 
     const itemsList = orders.map((order, index) => {

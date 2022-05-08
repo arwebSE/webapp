@@ -14,6 +14,7 @@ export default function InvoiceCreate({ navigation }) {
     const [invoice, setInvoice] = useState<Partial<Invoice>>({});
     const [currentOrder, setCurrentOrder] = useState<Partial<Order>>({});
     const [wait, setWait] = useState<boolean>(true);
+    const [disabled, setDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         console.log("Invoice updated:", invoice);
@@ -42,14 +43,20 @@ export default function InvoiceCreate({ navigation }) {
                 <Text style={{ ...Typography.header1 }}>New Invoice</Text>
 
                 <Text style={{ ...Typography.bold }}>Order</Text>
-                <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} wait={wait} />
+                <OrderDropdown
+                    invoice={invoice}
+                    setInvoice={setInvoice}
+                    setCurrentOrder={setCurrentOrder}
+                    wait={wait}
+                    setDisabled={setDisabled}
+                />
 
                 <Text style={{ ...Typography.bold }}>Date</Text>
-                <DateDropdown invoice={invoice} setInvoice={setInvoice} setWait={setWait}/>
+                <DateDropdown invoice={invoice} setInvoice={setInvoice} setWait={setWait} />
             </View>
 
             <View style={styles.button}>
-                <Button title="Save" onPress={() => addInvoice()} />
+                <Button title="Save" onPress={() => addInvoice()} disabled={disabled} />
             </View>
         </View>
     );

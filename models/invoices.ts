@@ -41,17 +41,12 @@ const invoices = {
         console.log("Attempting to DELETE invoice...");
         const token = await storage.readToken();
         if (token) {
-            const response = await fetch(`${config.baseUrl}/invoices`, {
+            await fetch(`${config.baseUrl}/invoices`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json", "x-access-token": [token.token] },
                 body: JSON.stringify(invoice),
             });
-            const result = await response.json();
-            if (!result.errors) return true;
-            else {
-                console.log("Error: Failed to DELETE invoice:", result.errors);
-                return false;
-            }
+            return true;
         } else {
             console.log("Error DELETING invoice: No valid token.");
         }

@@ -37,7 +37,8 @@ export default function Invoices({ navigation }) {
     const confirmDelete = (invoice) => {
         const deleteInvoice = async () => {
             console.log("Deleting invoice", `${invoice.id} - ${invoice.name}`);
-            invoiceModel.deleteInvoice(invoice);
+            await invoiceModel.deleteInvoice(invoice);
+            fetchInvoices();
         };
         Alert.alert("Confirm Delete", "Are you sure you want to delete the invoice?", [
             { text: "Delete", onPress: deleteInvoice, style: "destructive" },
