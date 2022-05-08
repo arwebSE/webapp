@@ -14,6 +14,7 @@ export default function NewDelivery({ navigation }) {
     const [delivery, setDelivery] = useState<Partial<Delivery>>({});
     const [currentProduct, setCurrentProduct] = useState<Partial<Product>>({});
     const commentEl = useRef(null);
+    const [wait, setWait] = useState<boolean>(true);
 
     useEffect(() => {
         console.log("Delivery updated:", delivery);
@@ -26,7 +27,7 @@ export default function NewDelivery({ navigation }) {
     const addDelivery = async () => {
         if (!delivery.amount) {
             console.log("Failed to input delivery amount!");
-            Alert.alert("Please input product AMOUNT!")
+            Alert.alert("Please input product AMOUNT!");
             return;
         }
 
@@ -49,10 +50,15 @@ export default function NewDelivery({ navigation }) {
             <Text style={{ ...Typography.header1 }}>Ny inleverans</Text>
 
             <Text style={{ ...Typography.bold }}>Produkt</Text>
-            <ProductDropDown delivery={delivery} setDelivery={setDelivery} setCurrentProduct={setCurrentProduct} />
+            <ProductDropDown
+                delivery={delivery}
+                setDelivery={setDelivery}
+                setCurrentProduct={setCurrentProduct}
+                wait={wait}
+            />
 
             <Text style={{ ...Typography.bold }}>Datum</Text>
-            <DateDropdown delivery={delivery} setDelivery={setDelivery} />
+            <DateDropdown delivery={delivery} setDelivery={setDelivery} setWait={setWait} />
 
             <Text style={{ ...Typography.bold }}>Antal</Text>
             <TextInput

@@ -9,16 +9,24 @@ export default function ProductDropDown(props) {
     const [products, setProducts] = useState<Product[]>([]);
     let productsHash: any = {};
 
+    const fetchProducts = async () => {
+        setLoading(true);
+        const products = await productModel.getProducts();
+        setProducts(products);
+        const newDelivery = { ...props.delivery, product_id: products[0].id };
+        props.setDelivery(newDelivery);
+        props.setCurrentProduct(products[0]);
+        setLoading(false);
+    };
+
     useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
-            const products = await productModel.getProducts();
-            setProducts(products);
-            props.setCurrentProduct(products[0]);
-            setLoading(false);
-        };
-        fetchProducts();
-    }, []);
+        if (props.wait) {
+            console.log("waiting...");
+        } else if (!props.wait) {
+            console.log("props.wait is false!");
+            fetchProducts();
+        }
+    }, [props.wait]);
 
     const itemsList = products.map((prod, index) => {
         productsHash[prod.id] = prod;

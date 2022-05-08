@@ -20,6 +20,8 @@ export default function DateDropdown(props) {
                 ...props.delivery,
                 delivery_date: date.toLocaleDateString("se-SV"),
             });
+            props.setWait(false);
+            console.log("set wait to false");
         } else if (props.invoice) {
             console.log("detected as ORDER date picker");
             props.setInvoice({
@@ -29,7 +31,6 @@ export default function DateDropdown(props) {
             });
             props.setWait(false);
             console.log("set wait to false");
-            
         }
     }, []);
 
