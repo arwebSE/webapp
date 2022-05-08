@@ -27,6 +27,9 @@ export default function DateDropdown(props) {
                 creation_date: date.toLocaleDateString("se-SV"),
                 due_date: dueDate.toLocaleDateString("se-SV"),
             });
+            props.setWait(false);
+            console.log("set wait to false");
+            
         }
     }, []);
 

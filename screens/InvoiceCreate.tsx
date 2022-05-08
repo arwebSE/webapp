@@ -13,14 +13,11 @@ import { toast } from "../utils/misc";
 export default function InvoiceCreate({ navigation }) {
     const [invoice, setInvoice] = useState<Partial<Invoice>>({});
     const [currentOrder, setCurrentOrder] = useState<Partial<Order>>({});
+    const [wait, setWait] = useState<boolean>(true);
 
     useEffect(() => {
         console.log("Invoice updated:", invoice);
     }, [invoice]);
-
-    useEffect(() => {
-        console.log("currentOrder updated", currentOrder.id);
-    }, [currentOrder]);
 
     const addInvoice = async () => {
         invoice.order_id = currentOrder.id;
@@ -45,10 +42,10 @@ export default function InvoiceCreate({ navigation }) {
                 <Text style={{ ...Typography.header1 }}>New Invoice</Text>
 
                 <Text style={{ ...Typography.bold }}>Order</Text>
-                <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} />
+                <OrderDropdown invoice={invoice} setInvoice={setInvoice} setCurrentOrder={setCurrentOrder} wait={wait} />
 
                 <Text style={{ ...Typography.bold }}>Date</Text>
-                <DateDropdown invoice={invoice} setInvoice={setInvoice} />
+                <DateDropdown invoice={invoice} setInvoice={setInvoice} setWait={setWait}/>
             </View>
 
             <View style={styles.button}>
