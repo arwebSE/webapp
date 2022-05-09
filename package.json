@@ -11,8 +11,10 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "setupFiles": ["./jestSetup.js"]
   },
+  
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/datetimepicker": "4.0.0",
