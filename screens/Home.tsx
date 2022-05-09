@@ -5,7 +5,7 @@ import Stock from "./Stock";
 
 const warehouse = require("../assets/warehouse.jpg");
 
-export default function Home({products, setProducts}) {
+export default function Home({ products, setProducts }) {
     return (
         <View style={styles.base}>
             <Text style={styles.title}>WarehouseApp</Text>
@@ -26,20 +26,6 @@ const styles = StyleSheet.create({
         fontSize: 42,
         padding: 20,
         textAlign: "center",
-    },
-    container: {
-        justifyContent: "space-between",
-        flexDirection: "row",
-    },
-    textLeft: {
-        color: "#bbb",
-        fontSize: 18,
-        textAlign: "left",
-    },
-    textRight: {
-        color: "#bbb",
-        fontSize: 18,
-        textAlign: "right",
     },
     logo: {
         width: 320 / 2,
