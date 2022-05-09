@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Pressable, SafeAreaView } from "react-native";
 import { StackActions } from "@react-navigation/native";
+import { showMessage } from "react-native-flash-message";
 
 import config from "../config/config.json";
-import { toast } from "../utils/misc";
 import authModel from "../models/auth";
 import Colors from "../constants/Colors";
 
@@ -24,16 +24,31 @@ export default function SettingsModal({ navigation }) {
             body: JSON.stringify({ api_key: `${config.apiKey}` }),
         });
         if (response.status === 201) {
-            toast("Reset successfully!");
+            console.log("DB was reset!");
+            showMessage({
+                message: "Reset Complete",
+                description: "Reset database successfully!",
+                type: "success",
+            });
             navigation.dispatch(StackActions.popToTop());
-            return true;
-        } else console.log("Failed to reset");
-        return;
+        } else {
+            console.log("Failed to reset");
+            showMessage({
+                message: "Reset Failed",
+                description: "Failed to reset database.",
+                type: "danger",
+            });
+        }
     };
 
     const logout = async () => {
         await authModel.logout();
-        toast("Logged out!");
+        console.log("Logged out user!");
+        showMessage({
+            message: "Logout",
+            description: "User logged out successfully!",
+            type: "success",
+        });
         navigation.dispatch(StackActions.popToTop());
     };
 
