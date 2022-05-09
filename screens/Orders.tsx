@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
-import OrderList from "./OrderList";
-import OrderDetails from "./OrderDetails";
+import OrderList from "../components/OrderList";
+import OrderDetails from "../components/OrderDetails";
 
 const Stack = createStackNavigator();
 

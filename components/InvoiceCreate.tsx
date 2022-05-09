@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Button } from "react-native";
 import { StackActions } from "@react-navigation/native";
-import DateDropdown from "../components/DateDropdown";
+import DateDropdown from "./DateDropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { Typography } from "../styles";
-import OrderDropdown from "./../components/OrderDropdown";
+import OrderDropdown from "./OrderDropdown";
 import invoiceModel from "../models/invoices";
 import orderModel from "../models/orders";
 import { toast } from "../utils/misc";

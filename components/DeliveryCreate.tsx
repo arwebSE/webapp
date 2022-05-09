@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import { StackActions } from "@react-navigation/native";
-import DateDropdown from "../components/DateDropdown";
+import DateDropdown from "./DateDropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { Typography } from "../styles";
-import ProductDropDown from "../components/ProductDropdown";
+import ProductDropDown from "./ProductDropdown";
 import deliveryModel from "../models/deliveries";
 import productModel from "../models/products";
 import { toast } from "../utils/misc";

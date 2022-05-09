@@ -15,6 +15,7 @@ import Home from "../screens/Home";
 import Orders from "../screens/Orders";
 import Deliveries from "../screens/Deliveries";
 import Invoices from "../screens/Invoices";
+import Shipping from "../screens/Shipping";
 
 export default function Navigation() {
     return (
@@ -49,6 +50,7 @@ const routeIcons = {
     Deliveries: "file-tray-stacked",
     Auth: "enter",
     Invoices: "cash",
+    Shipping: "map"
 };
 const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
@@ -130,6 +132,14 @@ function BottomTabNavigator() {
                     {() => <Auth setIsLoggedIn={setIsLoggedIn} />}
                 </Tab.Screen>
             )}
+            <Tab.Screen
+                name="Shipping"
+                component={Shipping}
+                options={({ route, navigation }) => ({
+                    headerShown: false,
+                    tabBarLabel: "Shipping",
+                })}
+            />
         </Tab.Navigator>
     );
 }

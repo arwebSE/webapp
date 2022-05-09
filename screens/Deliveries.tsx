@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
-import DeliveryList from "./DeliveryList";
-import DeliveryCreate from "./DeliveryCreate";
+import DeliveryList from "../components/DeliveryList";
+import DeliveryCreate from "../components/DeliveryCreate";
 
 const Stack = createStackNavigator();
 

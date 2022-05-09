@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 
-import InvoiceList from "./InvoiceList";
-import InvoiceCreate from "./InvoiceCreate";
+import InvoiceList from "../components/InvoiceList";
+import InvoiceCreate from "../components/InvoiceCreate";
 
 const Stack = createStackNavigator();
 

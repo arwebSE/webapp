@@ -41,6 +41,17 @@ export default function OrderDetails({ route, navigation, setProducts }) {
         setLoading(false);
     };
 
+    const setOrderAddress = async (order) => {
+        console.log(`setting order ${order.id} address to example address`);
+        setLoading(true);
+        order.address = "Valhallavägen 1";
+        order.city = "Karlskrona";
+        const result = await orderModel.updateOrder(order);
+        if (result) toast("Updated successfully!");
+        else toast("Update Error!");
+        setLoading(false);
+    };
+
     const itemsList = order.order_items.map((item, index) => {
         return (
             <View style={styles.row} key={index}>
@@ -75,13 +86,22 @@ export default function OrderDetails({ route, navigation, setProducts }) {
                     {order.status === "Ny" ? (
                         <Button title="Pick Order" onPress={pick} />
                     ) : (
-                        <Button
-                            title="Set as New (reset)"
-                            onPress={() => {
-                                setOrderAsNew(order);
-                                navigation.dispatch(StackActions.popToTop());
-                            }}
-                        />
+                        <>
+                            <Button
+                                title="Set as New (reset)"
+                                onPress={() => {
+                                    setOrderAsNew(order);
+                                    navigation.dispatch(StackActions.popToTop());
+                                }}
+                            />
+                            <Button
+                                title="Set Address to BTH"
+                                onPress={() => {
+                                    setOrderAddress(order);
+                                    navigation.dispatch(StackActions.popToTop());
+                                }}
+                            />
+                        </>
                     )}
                 </View>
             </ScrollView>
