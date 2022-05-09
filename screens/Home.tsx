@@ -8,7 +8,7 @@ const warehouse = require("../assets/warehouse.jpg");
 export default function Home({products, setProducts}) {
     return (
         <View style={styles.base}>
-            <Text style={styles.title}>LagerAppen</Text>
+            <Text style={styles.title}>WarehouseApp</Text>
             <Image source={warehouse} style={styles.logo} />
             <Stock products={products} setProducts={setProducts} />
         </View>

@@ -31,8 +31,8 @@ export default function Deliveries({ navigation }) {
 
             <FlatList
                 data={allDeliveries}
-                renderItem={({ item, index }) => (
-                    <View style={styles.container} key={index}>
+                renderItem={({ item }) => (
+                    <View style={styles.container}>
                         <Text style={Typography.header4}>
                             {item.amount}x "{item.product_name}"
                         </Text>
@@ -40,6 +40,7 @@ export default function Deliveries({ navigation }) {
                         <Text style={Typography.normal}>Comment: {item.comment}</Text>
                     </View>
                 )}
+                keyExtractor={(_item, index) => index.toString()}
                 refreshControl={
                     <RefreshControl
                         refreshing={loading}

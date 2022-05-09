@@ -22,15 +22,15 @@ export default function ShippingList({ navigation }) {
 
     return (
         <View style={styles.root}>
-            <Text style={styles.title}>Ordrar redo att skickas</Text>
+            <Text style={styles.title}>Orders Ready for Shipping</Text>
 
             <View style={styles.row}>
-                <Text style={Typography.bold}>Name</Text>
-                <Text style={Typography.bold}>Status</Text>
+                <Text style={Typography.bold as any}>Name</Text>
+                <Text style={Typography.bold as any}>Status</Text>
             </View>
 
             <FlatList
-                data={allOrders.filter((order) => order.status === "Packad")}
+                data={allOrders.filter((order) => order.status_id === 200)}
                 renderItem={({ item }) => (
                     <View style={styles.row}>
                         <Button

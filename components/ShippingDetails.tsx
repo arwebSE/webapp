@@ -44,8 +44,7 @@ export default function ShippingDetails({ route }) {
         }
         const gpsLocation = await Location.getCurrentPositionAsync({});
         setInitCoords(gpsLocation);
-        console.log("got initcoords", gpsLocation);
-
+        console.log("Got gps location with accuracy", gpsLocation.coords.accuracy);
         setInitMarker(
             <Marker
                 coordinate={{

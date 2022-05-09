@@ -24,22 +24,21 @@ export default function OrderList({ navigation }) {
     return (
         <View style={styles.root}>
             {showAll ? (
-                <Text style={styles.title}>Alla ordrar</Text>
+                <Text style={styles.title}>All Orders</Text>
             ) : (
-                <Text style={styles.title}>Ordrar redo att plockas</Text>
+                <Text style={styles.title}>Orders Ready to Pack</Text>
             )}
             <View style={styles.row}>
-                <Text style={Typography.bold}>Name</Text>
-                <Text style={Typography.bold}>Status</Text>
+                <Text style={Typography.bold as any}>Name</Text>
+                <Text style={Typography.bold as any}>Status</Text>
             </View>
 
             <FlatList
                 data={showAll ? allOrders : allOrders.filter((order) => order.status === "Ny")}
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                     <View style={styles.row}>
                         <Button
                             title={item.name}
-                            key={index + "b1"}
                             onPress={() => {
                                 navigation.navigate("OrderDetails", {
                                     order: item,
@@ -49,6 +48,7 @@ export default function OrderList({ navigation }) {
                         <Text style={Typography.normal}>{item.status}</Text>
                     </View>
                 )}
+                keyExtractor={(_item, index) => index.toString()}
                 refreshControl={
                     <RefreshControl
                         refreshing={loading}
