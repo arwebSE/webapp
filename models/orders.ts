@@ -1,5 +1,4 @@
 import config from "../config/config.json";
-import { toast } from "../utils/misc";
 import products from "./products";
 
 const orders = {
@@ -13,8 +12,11 @@ const orders = {
         for (let item of order.order_items) {
             if (item.amount > item.stock) {
                 console.log(`Error: Too few ${item.name} in stock!`);
-                toast(`Too few "${item.name}" in stock!`)
-                return false;
+                return {
+                    title: "Error picking order",
+                    message: `Too few "${item.name}" in stock!`,
+                    type: "danger",
+                };
             }
         }
         //updating stock
@@ -26,11 +28,27 @@ const orders = {
             };
             delete product.product_id;
             delete product.amount;
-            if (!(await products.updateProduct(product))) return false;
+            const result = await products.updateProduct(product);
+            if (result.type !== "success")
+                return {
+                    title: "Error picking order",
+                    message: "Could not update products.",
+                    type: "danger",
+                };
         }
         order.status_id = 200;
-        if (await orders.updateOrder(order)) return true;
-        else return false;
+        if (await orders.updateOrder(order))
+            return {
+                title: "Order picked!",
+                message: "Successfully picked order!",
+                type: "success",
+            };
+        else
+            return {
+                title: "Error picking order",
+                message: "Could not update order.",
+                type: "danger",
+            };
     },
     updateOrder: async function updateOrder(order: Partial<Order>) {
         order.api_key = config.apiKey;
@@ -39,10 +57,19 @@ const orders = {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(order),
         });
-        if (response.status === 204) return true;
+        if (response.status === 204)
+            return {
+                title: "Order updated!",
+                message: "Successfully updated order!",
+                type: "success",
+            };
         else {
-            console.log(`Error: Failed to update order: ${order.name}`);
-            return false;
+            console.log(`Error: Failed to update order ${order.id}`);
+            return {
+                title: "Error updating order",
+                message: `Failed to update order ${order.id}.`,
+                type: "danger",
+            };
         }
     },
 };

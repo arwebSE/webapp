@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, Button } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import DateDropdown from "./DateDropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { showMessage } from "react-native-flash-message";
 
 import { Typography } from "../styles";
 import OrderDropdown from "./OrderDropdown";
 import invoiceModel from "../models/invoices";
 import orderModel from "../models/orders";
-import { toast } from "../utils/misc";
 
 export default function InvoiceCreate({ navigation }) {
     const [invoice, setInvoice] = useState<Partial<Invoice>>({});
@@ -31,7 +31,11 @@ export default function InvoiceCreate({ navigation }) {
             };
             const orderResult = await orderModel.updateOrder(updatedOrder);
             if (orderResult) {
-                toast("Invoice successfully added!");
+                showMessage({
+                    message: "Invoice Added",
+                    description: "Invoice successfully added!",
+                    type: "success",
+                });
                 navigation.dispatch(StackActions.popToTop());
             }
         }

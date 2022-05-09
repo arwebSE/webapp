@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import { ActivityIndicator } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import { showMessage } from "react-native-flash-message";
 
 import orderModel from "../models/orders";
-import { useIsFocused } from "@react-navigation/native";
-import { toast } from "../utils/misc";
 
 export default function OrderDropdown(props) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -22,7 +22,12 @@ export default function OrderDropdown(props) {
             const newInvoice = { ...props.invoice, order_id: packagedOrders[0].id, total_price: orderSum };
             props.setInvoice(newInvoice);
         } else {
-            toast("Warning! No orders marked as 'packed'!");
+            console.log("Warning! No orders marked as 'packed'!");
+            showMessage({
+                message: "Warning",
+                description: "No orders marked as packed!",
+                type: "warning",
+            });
             props.setDisabled(true);
         }
         setLoading(false);

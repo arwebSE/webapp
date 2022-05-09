@@ -1,34 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button, FlatList, RefreshControl, ScrollView, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, Text, Button, ScrollView, ActivityIndicator } from "react-native";
 import { StackActions } from "@react-navigation/native";
+import { showMessage } from "react-native-flash-message";
 
 import orderModel from "../models/orders";
 import productModel from "../models/products";
 import { Typography } from "../styles";
-import { toast } from "../utils/misc";
 
 export default function OrderDetails({ route, navigation, setProducts }) {
     const { order } = route.params;
     const [loading, setLoading] = useState<boolean>(false);
-    const [productsList, setProductsList] = useState([]);
-
-    const fetchProducts = async () => {
-        setLoading(true);
-        setProductsList(await productModel.getProducts());
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
 
     const pick = async () => {
-        const results = await orderModel.pickOrder(order);
-        if (!results) console.log("error picking!");
-        else toast("Order picked successfully!");
-
-        setProducts(await productModel.getProducts());
-        navigation.dispatch(StackActions.popToTop());
+        const result = await orderModel.pickOrder(order);
+        showMessage({
+            message: result.title,
+            description: result.message,
+            type: result.type,
+        });
+        if (result.type === "success") {
+            setProducts(await productModel.getProducts());
+            navigation.dispatch(StackActions.popToTop());
+        } else console.log("error picking!");
     };
 
     const setOrderAsNew = async (order) => {
@@ -36,8 +29,11 @@ export default function OrderDetails({ route, navigation, setProducts }) {
         setLoading(true);
         order.status_id = 100;
         const result = await orderModel.updateOrder(order);
-        if (result) toast("Updated successfully!");
-        else toast("Update Error!");
+        showMessage({
+            message: result.title,
+            description: result.message,
+            type: result.type,
+        });
         setLoading(false);
     };
 
@@ -47,8 +43,11 @@ export default function OrderDetails({ route, navigation, setProducts }) {
         order.address = "Valhallavägen 1";
         order.city = "Karlskrona";
         const result = await orderModel.updateOrder(order);
-        if (result) toast("Updated successfully!");
-        else toast("Update Error!");
+        showMessage({
+            message: result.title,
+            description: result.message,
+            type: result.type,
+        });
         setLoading(false);
     };
 

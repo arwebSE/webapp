@@ -3,12 +3,12 @@ import { StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import { StackActions } from "@react-navigation/native";
 import DateDropdown from "./DateDropdown";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { showMessage } from "react-native-flash-message";
 
 import { Typography } from "../styles";
 import ProductDropDown from "./ProductDropdown";
 import deliveryModel from "../models/deliveries";
 import productModel from "../models/products";
-import { toast } from "../utils/misc";
 
 export default function NewDelivery({ navigation }) {
     const [delivery, setDelivery] = useState<Partial<Delivery>>({});
@@ -39,7 +39,11 @@ export default function NewDelivery({ navigation }) {
             };
             const productResult = await productModel.updateProduct(updatedProduct);
             if (productResult) {
-                toast("Delivery successfully added!");
+                showMessage({
+                    message: "Delivery Added",
+                    description: "Delivery successfully added!",
+                    type: "success",
+                });
                 navigation.dispatch(StackActions.popToTop());
             }
         }

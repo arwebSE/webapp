@@ -17,10 +17,18 @@ const products = {
         });
         if (response.status === 204) {
             console.log("Product update success!");
-            return true;
+            return {
+                title: "Product updated!",
+                message: "Successfully updated product!",
+                type: "success",
+            };
         } else {
             console.log(`Error: Failed to update product ${product.name}`);
-            return false;
+            return {
+                title: "Error updating order",
+                message: `Failed to update product ${product.name}.`,
+                type: "danger",
+            };
         }
     },
 };

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Button, ActivityIndicator, Platform, Linking } from "react-native";
 import MapView, { Marker, Circle } from "react-native-maps";
 import * as Location from "expo-location";
+import { showMessage } from "react-native-flash-message";
 
 import { Typography } from "../styles";
 import getCoordinates from "../models/nominatim";
-import { toast } from "../utils/misc";
 
 export default function ShippingDetails({ route }) {
     const { order } = route.params;
@@ -31,7 +31,12 @@ export default function ShippingDetails({ route }) {
     const getMyLocation = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
-            toast("Permission to access location was denied");
+            console.log("Permission to access location was denied");
+            showMessage({
+                message: "Permission denied",
+                description: "Permission to access location was denied.",
+                type: "warning",
+            });
             return;
         }
         const gpsLocation = await Location.getCurrentPositionAsync({});
@@ -73,7 +78,14 @@ export default function ShippingDetails({ route }) {
                     return Linking.openURL(url);
                 }
             })
-            .catch((err) => toast(`Error opening GMaps: ${err}`));
+            .catch((err) => {
+                console.log(`Error opening GMaps: ${err}`);
+                showMessage({
+                    message: "GMaps Error",
+                    description: `Error opening GMaps: ${err}`,
+                    type: "danger",
+                });
+            });
     };
 
     if (loading)

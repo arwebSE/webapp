@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { showMessage } from "react-native-flash-message";
 
 import AuthModel from "../models/auth";
 import AuthFields from "../components/AuthFields";
-import { toast } from "../utils/misc";
 
 export default function Login({ navigation }) {
     const [auth, setAuth] = useState<Partial<Auth>>({});
@@ -12,18 +12,16 @@ export default function Login({ navigation }) {
     async function doRegister() {
         if (auth.email && auth.password) {
             const result = await AuthModel.register(auth.email, auth.password);
-
-            if (result.data) {
-                toast(result.data.message);
+            let msg = result.message;
+            if (result.message == USEREXISTSERROR) msg = "Email already registered.";
+            if (result.type === "success") {
                 console.log("User register success!");
-            } else if (result.errors) {
-                if (result.errors.detail == USEREXISTSERROR) {
-                    console.log("Error: User already registered!");
-                    toast("That email is already registered.");
-                } else console.log("Error registering user!", result);
-            } else {
-                console.log("Error registering user!", result);
-            }
+            } else console.log(`Register Error: ${msg}`);
+            showMessage({
+                message: result.title,
+                description: msg,
+                type: result.type,
+            });
         }
     }
 
