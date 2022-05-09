@@ -27,7 +27,11 @@ export default function NewDelivery({ navigation }) {
     const addDelivery = async () => {
         if (!delivery.amount) {
             console.log("Failed to input delivery amount!");
-            Alert.alert("Please input product AMOUNT!");
+            showMessage({
+                message: "Delivery Failed",
+                description: "Please input product AMOUNT!",
+                type: "warning",
+            });
             return;
         }
 
