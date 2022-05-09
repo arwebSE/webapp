@@ -10,6 +10,7 @@ import getCoordinates from "../models/nominatim";
 export default function ShippingDetails({ route }) {
     const { order } = route.params;
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingMsg, setLoadingMsg] = useState<string>("");
     const [destLabel, setDestLabel] = useState<string | null>(null);
     const [initMarker, setInitMarker] = useState(null);
     const [destMarker, setDestMarker] = useState(null);
@@ -18,12 +19,14 @@ export default function ShippingDetails({ route }) {
 
     const fetchMarker = async () => {
         setLoading(true);
+        setLoadingMsg("Loading destination...");
         const results = await getCoordinates(`${order.address}, ${order.city}`);
         const fetchedCoords = { latitude: parseFloat(results[0].lat), longitude: parseFloat(results[0].lon) };
         setDestCoords(fetchedCoords);
         const displayName = results[0].display_name;
         setDestLabel(displayName);
         setDestMarker(<Marker coordinate={fetchedCoords} title={displayName} />);
+        setLoadingMsg("Getting your location...");
         await getMyLocation();
         setLoading(false);
     };
@@ -92,6 +95,7 @@ export default function ShippingDetails({ route }) {
         return (
             <View style={{ flex: 1, justifyContent: "center" }}>
                 <ActivityIndicator size={"large"} color={"white"} />
+                <Text style={Typography.label}>{loadingMsg}</Text>
             </View>
         );
     return (

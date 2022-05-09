@@ -25,12 +25,13 @@ export default function StockList({ products, setProducts }) {
     return (
         <FlatList
             data={products}
-            renderItem={({ item, index }) => (
-                <View key={index} style={styles.container}>
+            renderItem={({ item }) => (
+                <View style={styles.container}>
                     <Text style={styles.textLeft}>{item.name}</Text>
                     <Text style={styles.textRight}>{item.stock}</Text>
                 </View>
             )}
+            keyExtractor={(_item, index) => index.toString()}
             refreshControl={
                 <RefreshControl
                     refreshing={loading}

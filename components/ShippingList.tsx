@@ -31,11 +31,10 @@ export default function ShippingList({ navigation }) {
 
             <FlatList
                 data={allOrders.filter((order) => order.status === "Packad")}
-                renderItem={({ item, index }) => (
+                renderItem={({ item }) => (
                     <View style={styles.row}>
                         <Button
                             title={item.name}
-                            key={index + "b1"}
                             onPress={() => {
                                 navigation.navigate("ShippingDetails", {
                                     order: item,
@@ -45,6 +44,7 @@ export default function ShippingList({ navigation }) {
                         <Text style={Typography.normal}>{item.status}</Text>
                     </View>
                 )}
+                keyExtractor={(_item, index) => index.toString()}
                 refreshControl={
                     <RefreshControl
                         refreshing={loading}
