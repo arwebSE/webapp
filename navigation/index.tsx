@@ -50,11 +50,10 @@ const routeIcons = {
     Deliveries: "file-tray-stacked",
     Auth: "enter",
     Invoices: "cash",
-    Shipping: "map"
+    Shipping: "map",
 };
 const Tab = createBottomTabNavigator();
 function BottomTabNavigator() {
-    const [products, setProducts] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
     const setLoggedIn = async () => {
@@ -93,7 +92,7 @@ function BottomTabNavigator() {
                     ),
                 })}
             >
-                {() => <Home products={products} setProducts={setProducts} />}
+                {() => <Home />}
             </Tab.Screen>
             <Tab.Screen
                 name="Orders"
@@ -103,7 +102,7 @@ function BottomTabNavigator() {
                     tabBarLabel: "Orders",
                 })}
             >
-                {() => <Orders setProducts={setProducts} />}
+                {() => <Orders />}
             </Tab.Screen>
             <Tab.Screen
                 name="Deliveries"

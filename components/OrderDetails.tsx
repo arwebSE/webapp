@@ -7,9 +7,10 @@ import orderModel from "../models/orders";
 import productModel from "../models/products";
 import { Typography } from "../styles";
 
-export default function OrderDetails({ route, navigation, setProducts }) {
+export default function OrderDetails({ route, navigation }) {
     const { order } = route.params;
     const [loading, setLoading] = useState<boolean>(false);
+    const [products, setProducts] = useState([]);
 
     const pick = async () => {
         const result = await orderModel.pickOrder(order);

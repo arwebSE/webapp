@@ -1,17 +1,16 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
-import productModel from "../models/products";
 import StockList from "../components/StockList";
 
-export default function Stock({ products, setProducts }) {
+export default function Stock() {
     return (
         <>
             <View style={styles.container}>
                 <Text style={styles.title}>Name</Text>
                 <Text style={styles.title}>Amount</Text>
             </View>
-            <StockList products={products} setProducts={setProducts} />
+            <StockList/>
         </>
     );
 }

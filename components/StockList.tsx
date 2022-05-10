@@ -4,8 +4,9 @@ import { Text, View, StyleSheet, FlatList, RefreshControl } from "react-native";
 
 import productModel from "../models/products";
 
-export default function StockList({ products, setProducts }) {
+export default function StockList() {
     const [loading, setLoading] = useState<boolean>(false);
+    const [products, setProducts] = useState([]);
 
     async function fetchProducts() {
         setLoading(true);
