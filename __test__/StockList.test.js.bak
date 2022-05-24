@@ -1,0 +1,62 @@
+import React from "react";
+import { render } from "@testing-library/react-native";
+import renderer from "react-test-renderer";
+
+import { rest } from "msw";
+import { setupServer } from "msw/node";
+
+import StockList from "../components/StockList";
+import config from "../config/config.json";
+
+const prodUrl = config.baseUrl + "/products";
+const prodResponse = rest.get(prodUrl, (req, res, ctx) => {
+    const resp = res(ctx.json([{}]));
+    console.log("resp", resp);
+    return resp;
+});
+
+const handlers = [prodResponse]
+const server = new setupServer(...handlers);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+beforeAll(() => server.close());
+
+/* const products = [
+    { name: "Shampoo", stock: 2 },
+    { name: "Balsam", stock: 3 },
+    { name: "Soap", stock: 15 },
+];
+
+const setProducts = () => false; */
+
+/*
+test("List should contain three items", async () => {
+    const { getByText, debug } = render(<StockList />);
+
+    debug("StockList component");
+
+    const shampoo = await getByText("Shampoo", { exact: false });
+    const balsam = await getByText("Balsam", { exact: false });
+    const soap = await getByText("Soap", { exact: false });
+
+    expect(shampoo).toBeDefined();
+    expect(balsam).toBeDefined();
+    expect(soap).toBeDefined(); 
+});
+*/
+
+describe("<StockList />", () => {
+    //debug("StockList component");
+    it("has 1 child", () => {
+        const tree = render(<StockList />).toJSON();
+        console.log("tree", tree.props.data);
+        
+    });
+    it("has correct response", () => {
+        const { getByText, debug, toJSON } = render(<StockList />);
+        const jsonTree = toJSON();
+        //console.log("json", jsonTree);
+        expect(tree).toMatchSnapshot();
+    });
+});

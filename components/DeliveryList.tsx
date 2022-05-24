@@ -5,7 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 import deliveryModel from "../models/deliveries";
 import { Typography } from "../styles";
 
-export default function Deliveries({ navigation }) {
+export default function DeliveryList({ navigation }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [allDeliveries, setAllDeliveries] = useState([]);
 

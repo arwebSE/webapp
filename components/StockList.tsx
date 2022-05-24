@@ -10,7 +10,10 @@ export default function StockList() {
 
     async function fetchProducts() {
         setLoading(true);
-        setProducts(await productModel.getProducts());
+        const prod = await productModel.getProducts();
+        setProducts(prod);
+        console.log("got prods:", prod);
+        
         setLoading(false);
     }
 
